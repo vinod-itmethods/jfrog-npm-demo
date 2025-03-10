@@ -1,14 +1,14 @@
 {
-    "name": "npm-demo",
-    "version": "1.0.0",
-    "description": "A sample NPM project for JFrog Artifactory",
-    "main": "index.js",
-    "scripts": {
-      "test": "echo \"Running Tests...\" && exit 0",
-      "build": "echo \"Building Project...\""
-    },
-    "dependencies": {
-      "lodash": "^4.17.21"
-    }
-  }
-  
+  "name": "jfrog-npm-demo",
+  "version": "1.0.0",
+  "description": "NPM Demo with JFrog OIDC",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Your Name",
+  "license": "MIT"
+}

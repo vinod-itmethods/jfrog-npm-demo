@@ -1,11 +1,10 @@
-// src/index.js
+const express = require("express");
+const app = express();
 
-const _ = require("lodash");
+app.get("/", (req, res) => {
+  res.send("Hello, JFrog Artifactory with NPM!");
+});
 
-function greet(name) {
-    return `Hello, ${_.startCase(name)}!`;
-}
-
-console.log(greet("jfrog demo"));
-
-module.exports = greet;
+app.listen(3000, () => {
+  console.log("Server running on port 3000");
+});
