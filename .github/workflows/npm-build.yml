@@ -34,11 +34,16 @@ jobs:
             --interactive=false
 
       - name: Configure NPM Authentication
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.JFROG_TOKEN }}
         run: |
           echo "registry=https://artifactory.stage.0658b-techopscore.com/artifactory/api/npm/npm-opensource/" > ~/.npmrc
-          echo "//artifactory.stage.0658b-techopscore.com/artifactory/api/npm/npm-opensource/:_authToken=${{ secrets.JFROG_TOKEN }}" >> ~/.npmrc
-          echo "//artifactory.stage.0658b-techopscore.com/artifactory/api/npm/npm-appcode-dev/:_authToken=${{ secrets.JFROG_TOKEN }}" >> ~/.npmrc
+          echo "//artifactory.stage.0658b-techopscore.com/artifactory/api/npm/npm-opensource/:_authToken=${NPM_AUTH_TOKEN}" >> ~/.npmrc
+          echo "//artifactory.stage.0658b-techopscore.com/artifactory/api/npm/npm-appcode-dev/:_authToken=${NPM_AUTH_TOKEN}" >> ~/.npmrc
           echo "always-auth=true" >> ~/.npmrc
+
+      - name: Verify NPM Configuration
+        run: cat ~/.npmrc
 
       - name: Install Dependencies from Artifactory
         run: npm install
