@@ -1,0 +1,14 @@
+{
+    "name": "npm-demo",
+    "version": "1.0.0",
+    "description": "A sample NPM project for JFrog Artifactory",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Running Tests...\" && exit 0",
+      "build": "echo \"Building Project...\""
+    },
+    "dependencies": {
+      "lodash": "^4.17.21"
+    }
+  }
+  

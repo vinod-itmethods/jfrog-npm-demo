@@ -1,0 +1,50 @@
+name: NPM Build and Publish to Artifactory
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read  
+  id-token: write  
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Install JFrog CLI
+        run: |
+          curl -fL https://getcli.jfrog.io | sh
+          chmod +x jfrog
+          mv jfrog /usr/local/bin/
+
+      - name: Authenticate JFrog CLI Using Access Token
+        env:
+          JFROG_USER: ${{ secrets.JFROG_USER }}
+          JFROG_TOKEN: ${{ secrets.JFROG_TOKEN }}
+        run: |
+          export JFROG_CLI_OFFER_CONFIG=false
+          jfrog config add my-artifactory \
+            --url=https://artifactory.stage.0658b-techopscore.com \
+            --access-token=$JFROG_TOKEN \
+            --interactive=false
+
+      - name: Configure NPM Authentication
+        run: |
+          echo "registry=https://artifactory.stage.0658b-techopscore.com/artifactory/api/npm/npm-opensource/" > ~/.npmrc
+          echo "//artifactory.stage.0658b-techopscore.com/artifactory/api/npm/npm-opensource/:_authToken=${{ secrets.JFROG_TOKEN }}" >> ~/.npmrc
+          echo "//artifactory.stage.0658b-techopscore.com/artifactory/api/npm/npm-appcode-dev/:_authToken=${{ secrets.JFROG_TOKEN }}" >> ~/.npmrc
+          echo "always-auth=true" >> ~/.npmrc
+
+      - name: Install Dependencies from Artifactory
+        run: npm install
+
+      - name: Build Project
+        run: npm run build
+
+      - name: Publish to Artifactory
+        run: npm publish --registry=https://artifactory.stage.0658b-techopscore.com/artifactory/api/npm/npm-appcode-dev/
